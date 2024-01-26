@@ -1,0 +1,74 @@
+library("dplyr")
+
+df<-read.csv("phone_data (1).csv")
+summary(df)
+
+#Q.1
+voda_users <- df %>%
+  filter(network=='Vodafone') %>%
+  nrow()
+
+voda_users
+
+
+#Q.2
+noof_call<-sum(df$duration > 15)
+noof_call
+
+#Q.3
+top5_call <- df %>%
+  filter(item == 'call') %>%
+  arrange(desc(duration)) %>%
+  distinct(month, .keep_all=TRUE) %>%
+  head(5)
+top5_call
+
+#Q.4
+avg_duration_of_each_nettype <- df%>%
+  group_by(network_type) %>%
+  summarise(avg_duration = mean(duration)) 
+
+avg_duration_of_each_nettype
+
+#Q.5
+avg_duration_of_each_item <- df%>%
+  group_by(item, network) %>%
+  summarise(avg_duration = mean(duration)) 
+avg_duration_of_each_item  
+
+#Q.6
+eachitem_count <- df%>%
+  group_by(item, network) %>%
+  summarise(count = n()) 
+eachitem_count 
+
+#Q.7
+max_call_month <- df %>%
+  filter(item == 'call') %>%
+  group_by(month) %>%
+  summarise(count=n()) %>%
+  arrange(desc(count)) %>%
+  head(1)
+max_call_month
+
+#Q.8
+total_world_users <- df%>%
+  filter(network=='world' & item=='sms') %>%
+  nrow()
+
+total_world_users
+
+#Q.9
+metero_users <- df%>%
+  filter(network=='meteor') %>%
+  nrow()/nrow(df)
+
+metero_users
+
+#Q.10
+month_max_dur <- df%>%
+  group_by(month) %>%
+  summarise(total_dur = sum(duration)) %>%
+  arrange(desc(total_dur))%>%
+  head(1)
+month_max_dur
